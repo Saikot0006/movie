@@ -25,6 +25,7 @@
             <ImageView
                 android:layout_width="200dp"
                 android:layout_height="200dp"
+                imageFromUrl="@{nowShowing.poster_path}"
                 android:src="@drawable/movie_placeholder"
                 android:scaleType="fitXY" />
 
@@ -63,6 +64,12 @@
                     android:layout_marginLeft="5dp"
                     android:textColor="@color/black"
                     android:text="@{String.valueOf(nowShowing.vote_average)}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="/10 IMDb" />
             </LinearLayout>
             <!--/10 IMDb-->
 

@@ -1,19 +1,37 @@
 package com.example.movieapp.adapter
 
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.movieapp.R
 import com.example.movieapp.databinding.NowShowingRowItemBinding
 import com.example.movieapp.model.NowShowingMovieModel
 import com.example.movieapp.model.Result
+import com.example.movieapp.utils.ConstraintUtils
+import okhttp3.internal.Util
 
-class NowShowingAdapter : androidx.recyclerview.widget.ListAdapter<com.example.movieapp.model.Result,
+class NowShowingAdapter(val callback: (movie: Result) -> Unit) : androidx.recyclerview.widget.ListAdapter<com.example.movieapp.model.Result,
         NowShowingAdapter.NowShowingViewHolder>(NowShowingDiffUtil()) {
 
-    class NowShowingViewHolder(private val binding : NowShowingRowItemBinding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NowShowingViewHolder {
+        val binding = NowShowingRowItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return NowShowingViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: NowShowingViewHolder, position: Int) {
+        var result = getItem(position)
+        holder.bind(result)
+        holder.binding.root.setOnClickListener {
+            ConstraintUtils.movieDetails.nowShowingMovieID = result.id
+            Log.e("hell01", "onBindViewHolder: hell01" )
+            callback(result)
+        }
+
+    }
+
+    class NowShowingViewHolder(val binding : NowShowingRowItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
             fun bind(nowShowing : com.example.movieapp.model.Result){
@@ -32,14 +50,5 @@ class NowShowingAdapter : androidx.recyclerview.widget.ListAdapter<com.example.m
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NowShowingViewHolder {
-        val binding = NowShowingRowItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return NowShowingViewHolder(binding)
-    }
 
-    override fun onBindViewHolder(holder: NowShowingViewHolder, position: Int) {
-        //var  movieList = List<Result>
-        var result = getItem(position)
-        holder.bind(result)
-    }
 }
