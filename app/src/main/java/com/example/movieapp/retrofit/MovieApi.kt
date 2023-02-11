@@ -19,6 +19,6 @@ interface MovieApi {
     @GET("3/genre/movie/list?api_key=19c1c2d504f8ac3c45453893ebb0e54d&language=en-US")
     suspend fun getGenre() : Response<GenreModel>
 
-    @GET("3/movie/movieId/?api_key=19c1c2d504f8ac3c45453893ebb0e54d&language=en-US")
-    suspend fun getMovieDetails(@Path("user")  movieId : Int) : Response<MovieDetailsModel>
+    @GET("3/movie/{movie_id}?api_key=19c1c2d504f8ac3c45453893ebb0e54d&language=en-US")
+    suspend fun getMovieDetails(@Path("movie_id")  movieId : Int) : Response<MovieDetailsModel>
 }

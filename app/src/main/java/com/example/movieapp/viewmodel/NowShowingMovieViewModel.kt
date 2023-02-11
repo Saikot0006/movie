@@ -50,5 +50,4 @@ class NowShowingMovieViewModel(application: Application)
             repository.getGenre()
         }
     }
-
 }

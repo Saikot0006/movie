@@ -8,8 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.movieapp.databinding.PopularMovieRowItemBinding
 import com.example.movieapp.model.PResult
 import com.example.movieapp.model.PopularMovieModel
+import com.example.movieapp.utils.ConstraintUtils
 
-class PopularMovieAdapter :
+class PopularMovieAdapter(val callback : (movie : PResult) -> Unit) :
     ListAdapter<PResult, PopularMovieAdapter.PopularMovieViewHolder>(PopularMovieDiffUtil()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularMovieViewHolder {
@@ -22,10 +23,15 @@ class PopularMovieAdapter :
     override fun onBindViewHolder(holder: PopularMovieViewHolder, position: Int) {
         var result = getItem(position)
         holder.bind(result)
+        holder.binding.root.setOnClickListener {
+            ConstraintUtils.movieDetails.nowShowingMovieID = result.id
+            callback(result)
+        }
+
 
     }
 
-    class PopularMovieViewHolder(private var binding : PopularMovieRowItemBinding)
+    class PopularMovieViewHolder(var binding : PopularMovieRowItemBinding)
         : RecyclerView.ViewHolder(binding.root){
 
             fun bind(popularMovie : PResult){

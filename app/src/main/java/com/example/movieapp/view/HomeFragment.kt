@@ -1,8 +1,10 @@
 package com.example.movieapp.view
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -11,7 +13,6 @@ import com.example.movieapp.R
 import com.example.movieapp.adapter.NowShowingAdapter
 import com.example.movieapp.adapter.PopularMovieAdapter
 import com.example.movieapp.databinding.FragmentHomeBinding
-import com.example.movieapp.utils.ConstraintUtils
 import com.example.movieapp.viewmodel.NowShowingMovieViewModel
 
 
@@ -32,6 +33,8 @@ class HomeFragment : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity()).get(NowShowingMovieViewModel::class.java)
 
+        val mProgressDialog = ProgressDialog(requireContext())
+        mProgressDialog.show()
 
         //binding.toolbar. = "FilmKu"
 
@@ -39,7 +42,9 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.detailsFragment)
         }
 
-        popularMovieAdapter = PopularMovieAdapter()
+        popularMovieAdapter = PopularMovieAdapter{movie ->
+            findNavController().navigate(R.id.detailsFragment)
+        }
 
         binding.nowShowingRV.apply {
             layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
@@ -47,10 +52,9 @@ class HomeFragment : Fragment() {
         }
 
         binding.popularRV.apply {
-            layoutManager =  LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+            layoutManager =  LinearLayoutManager(requireContext())
             adapter = popularMovieAdapter
         }
-
 
         viewModel.getGenre()
 
@@ -60,7 +64,7 @@ class HomeFragment : Fragment() {
 
         viewModel.getPopularMovie(1).observe(viewLifecycleOwner){
             popularMovieAdapter.submitList(it.results)
-            Log.e("popularMovieResult", "getPopularMovie009: "+it.results.get(0).original_language )
+            mProgressDialog.dismiss()
 
         }
 
