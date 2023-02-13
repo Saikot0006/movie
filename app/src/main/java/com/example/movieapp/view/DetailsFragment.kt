@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.movieapp.R
 import com.example.movieapp.adapter.GenresAdapter
 import com.example.movieapp.databinding.FragmentDetailsBinding
 import com.example.movieapp.model.BookmarkModel
@@ -24,6 +25,7 @@ class DetailsFragment : Fragment() {
     private var genresList = ArrayList<Genre>()
     private lateinit var genresAdapter: GenresAdapter
     private lateinit var bookmarks : BookmarkModel
+    private  var favorite : Boolean = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,30 +66,53 @@ class DetailsFragment : Fragment() {
             }
 
             //checkFavorite(it.id.toLong())
+            checkBookMark()
 
-            bookmarks = BookmarkModel(0,it.id.toLong(),it.title,time,genre!!)
+            bookmarks = BookmarkModel(
+                bookmarkId = it.id.toLong(),name = it.title, runTime = time, genreList = genre!!,
+                ratting = it.vote_average.toString(), imageUrl = it.poster_path)
 
 
             binding.movieTimeTVID.text = hour.toString()+" h "+minute.toString()+" min"
             Glide.with(requireActivity())
-                .load("https://image.tmdb.org/t/p/w500/"+it.poster_path)
+                .load("https://image.tmdb.org/t/p/w500/"+it.backdrop_path)
                 .into(binding.movieDetailsIV)
             binding.details = it
 
         }
 
-
         binding.detailsFavoriteID.setOnClickListener {
-            Log.e("bookmark", "onCreateView: hello bookmark" )
-            viewModel.insertBookMarks(bookmarks)
+            if(favorite){
+                viewModel.deleteBookMarks(ConstraintUtils.movieDetails.nowShowingMovieID.toLong())
+                checkBookMark()
+            }else{
+                viewModel.insertBookMarks(bookmarks)
+                checkBookMark()
+            }
         }
+
+
+
+
         return binding.root
     }
 
-    private fun checkFavorite(id : Long) {
-        viewModel.getMovieById(id).observe(viewLifecycleOwner){
-            Log.e("favorite", "checkFavorite: favorite00009"+it )
-        }
+    private fun checkBookMark() {
+        viewModel.getMovieById(ConstraintUtils.movieDetails.nowShowingMovieID.toLong())
+            .observe(viewLifecycleOwner){
+                if(it!=null){
+                    favorite = true
+                    Glide.with(requireActivity())
+                        .load(R.drawable.baseline_bookmark)
+                        .into(binding.detailsFavoriteID)
+                }else{
+                    favorite = false
+                    Glide.with(requireActivity())
+                        .load(R.drawable.baseline_bookmark_border_24)
+                        .into(binding.detailsFavoriteID)
+                }
+                Log.e("fads", "onCreateView: "+it.toString() )
+            }
     }
 
 

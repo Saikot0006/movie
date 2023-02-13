@@ -10,8 +10,9 @@
     </data>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/popularCardView"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         app:cardCornerRadius="5dp">
 
         <LinearLayout
@@ -70,14 +71,24 @@
                         android:text="/10 IMDb" />
                 </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
+                <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="3dp"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/popular_genrs_row_item" />
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/popularGanerRVID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="3dp"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/popular_genrs_row_item" />
+
+                </HorizontalScrollView>
+
+
 
                 <LinearLayout
 

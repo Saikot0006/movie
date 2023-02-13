@@ -1,5 +1,7 @@
 package com.example.movieapp.utils
 
+import android.graphics.Color
+import android.view.Gravity
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -19,14 +21,36 @@ fun ImageView.imageFromUrl(url : String){
 
 }
 
-/*@BindingAdapter("app:setGenreView")
+@BindingAdapter("app:setGenreView")
 fun setGenreView(linear : LinearLayout, text: String){
     val strs = text.split(",").toTypedArray()
 
     linear.removeAllViews()
-    strs.forEach {
+
+    for(i in 0..strs.size - 2){
         val dynamicTextview = TextView(linear.context)
-        dynamicTextview.text = it
+        dynamicTextview.text = strs.get(i)
+        dynamicTextview.setBackgroundResource(R.drawable.genres_border)
+
+        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+        params.setMargins(0, 10, 15, 5)
+
+        dynamicTextview.layoutParams = params
+
+
         linear.addView(dynamicTextview)
     }
-}*/
+    /*strs.forEach {
+        val dynamicTextview = TextView(linear.context)
+        dynamicTextview.text = it
+        dynamicTextview.setBackgroundResource(R.drawable.genres_border)
+
+        val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+        params.setMargins(0, 10, 15, 5)
+
+        dynamicTextview.layoutParams = params
+
+
+        linear.addView(dynamicTextview)
+    }*/
+}

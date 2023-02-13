@@ -14,12 +14,12 @@ class MovieDetailsRepository(
     private var movieApi: MovieApi) {
 
     private var detailsMutableData = MutableLiveData<MovieDetailsModel>()
-    private var favoriteMutableData = MutableLiveData<Boolean>()
+    private var favoriteMutableData = MutableLiveData<BookmarkModel>()
 
     val detailsLiveData : LiveData<MovieDetailsModel>
     get() = detailsMutableData
 
-    val favoriteLiveData : LiveData<Boolean>
+    val favoriteLiveData : LiveData<BookmarkModel>
     get() = favoriteMutableData
 
     suspend fun getMovieDetails(){
@@ -39,11 +39,17 @@ class MovieDetailsRepository(
 
     }
 
-     fun getMovieById(bookmarkId : Long){
+    suspend fun deleteBookMarks(id: Long){
+        try {
+            dao.deleteBookMarks(id)
+        }catch (e:Exception){}
+    }
+
+      suspend fun getMovieById(bookmarkId : Long){
         try {
             var result = dao.getMovieById(bookmarkId)
-            favoriteMutableData.postValue(result.value)
-            Log.e("favorite", "checkFavorite: favorite00009"+result.value.toString() )
+            favoriteMutableData.postValue(result)
+            Log.e("favorite", "checkFavorite: favorite00009"+result.toString() )
 
         }catch (e:Exception){}
 

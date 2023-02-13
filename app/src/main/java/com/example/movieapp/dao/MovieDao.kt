@@ -2,6 +2,7 @@ package com.example.movieapp.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.movieapp.model.BookmarkModel
@@ -15,11 +16,20 @@ interface MovieDao {
     @Insert
     suspend fun insertBookMarks(bookmarkModel: BookmarkModel)
 
-    @Query("select bookmark_id from tbl_bookmark where bookmark_id = :bookmarkId")
-    fun getMovieById(bookmarkId : Long) : LiveData<Boolean>
+    @Query("delete from tbl_bookmark where bookmark_id = :bookmarkId")
+    suspend fun deleteBookMarks(bookmarkId : Long)
+
+    @Query("select * from tbl_bookmark where bookmark_id = :bookmarkId")
+    suspend fun getMovieById(bookmarkId : Long) : BookmarkModel?
 
     @Query("select * from tbl_bookmark")
     fun getBookMarkMovie() : LiveData<List<BookmarkModel>>
+
+    @Query("select * from tbl_genre where id = :id")
+    suspend fun getGenreDataByID(id : Int) : List<Genre>
+
+    @Query("select * from tbl_genre")
+    suspend fun getAllGenre() : List<Genre>
 
 
 }

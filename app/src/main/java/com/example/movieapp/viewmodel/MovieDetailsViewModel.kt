@@ -39,13 +39,20 @@ class MovieDetailsViewModel(application: Application)
         }
     }
 
-    fun getMovieById(bookmarkId : Long) : LiveData<Boolean>{
+     fun deleteBookMarks(id: Long){
+        viewModelScope.launch {
+            try {
+                repository.deleteBookMarks(id)
+            }catch (e:Exception){}
+        }
+    }
+
+     fun getMovieById(bookmarkId : Long) : LiveData<BookmarkModel>{
         viewModelScope.launch {
             try {
                 repository.getMovieById(bookmarkId)
             }catch (e:Exception){}
         }
-
         return repository.favoriteLiveData
 
     }

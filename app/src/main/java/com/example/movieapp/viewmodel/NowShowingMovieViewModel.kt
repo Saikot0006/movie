@@ -27,8 +27,14 @@ class NowShowingMovieViewModel(application: Application)
             movieApi = RetrofitInstance.getRetrofitInstance()
                 .create(MovieApi::class.java)
             dao = MovieDB.getDB(application).getDao()
-            repository = NowShowingRepository(movieApi,dao)
+            repository = NowShowingRepository(movieApi,dao,application)
         }
+
+    val NowShowingMovieResult : LiveData<NowShowingMovieModel>
+        get() = repository.movieResult
+
+    val popularMovieResult : LiveData<PopularMovieModel>
+        get() = repository.popularMovie
 
 
     fun getNowShowingMovie(page : Int) : LiveData<NowShowingMovieModel>{
@@ -50,4 +56,25 @@ class NowShowingMovieViewModel(application: Application)
             repository.getGenre()
         }
     }
+
+     fun getGenreDataByID(id : Int) : LiveData<List<Genre>>{
+        try {
+            viewModelScope.launch {
+                repository.getGenreDataByID(id)
+            }
+        }catch (e:Exception){}
+         return repository.genreLiveData
+    }
+
+
+    /*fun getAllGenre() : LiveData<List<Genre>>{
+        try {
+            viewModelScope.launch {
+                repository.getAllGenre()
+            }
+        }catch (e:Exception){}
+         return repository.genreLiveData
+    }*/
+
+
 }

@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="bookMark"
+            type="com.example.movieapp.model.BookmarkModel" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         app:cardCornerRadius="30dp"
         android:layout_margin="5dp"
         android:elevation="4dp">
@@ -26,7 +29,8 @@
                 android:layout_weight="1"
                 android:src="@drawable/movie_placeholder"
                 android:scaleType="fitXY"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                imageFromUrl="@{bookMark.imageUrl}"/>
 
             <View
                 android:layout_width="0dp"
@@ -42,7 +46,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="You People"
+                    tools:text="You People"
+                    android:text="@{bookMark.name}"
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
@@ -64,17 +69,34 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:textColor="@color/black"
-                        android:text="9.1/10 IMDb" />
+                        tools:text="9.1"
+                        android:text="@{bookMark.ratting}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/black"
+                        android:text="/10 IMDb" />
                 </LinearLayout>
 
-                <!--<androidx.recyclerview.widget.RecyclerView
+                <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="3dp"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/movie_details_genrs_row_item" />-->
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal"
+                        app:setGenreView="@{bookMark.genreList}"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/movie_details_genrs_row_item" />
+
+                </HorizontalScrollView>
+
 
                 <!--<LinearLayout
                     android:layout_width="match_parent"
@@ -100,11 +122,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:textColor="@color/black"
-                        android:text="1h 47m" />
+                        tools:text="1h 47m"
+                        android:text="@{bookMark.runTime}" />
                 </LinearLayout>
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/deleteBookMarkRowItemId"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.4"

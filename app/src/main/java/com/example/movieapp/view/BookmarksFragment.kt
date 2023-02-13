@@ -7,8 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.movieapp.R
+import com.example.movieapp.adapter.BookMarkAdapter
+import com.example.movieapp.custom_dialog.DeleteDialog
 import com.example.movieapp.databinding.FragmentBookmarksBinding
 import com.example.movieapp.databinding.FragmentHomeBinding
+import com.example.movieapp.utils.ConstraintUtils
 import com.example.movieapp.viewmodel.BookMarkViewModel
 
 
@@ -16,6 +22,7 @@ class BookmarksFragment : Fragment() {
 
     private lateinit var binding: FragmentBookmarksBinding
     private lateinit var viewModel : BookMarkViewModel
+    private lateinit var bookMarkAdapter: BookMarkAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,11 +33,31 @@ class BookmarksFragment : Fragment() {
         binding.toolbar.notificationAppBarIV.visibility = View.INVISIBLE
         binding.toolbar.appBarTV.text = "Bookmarks"
 
-        viewModel.getBookMarkMovie().observe(viewLifecycleOwner){
-            for(i in 0..it.size-1){
-                val strs = it.get(i).genreList.split(",").toTypedArray()
+        bookMarkAdapter = BookMarkAdapter {bookMark, value ->
+            if(value==1){
+                DeleteDialog(
+                    bookMark.name,
+                    "Do you want to delete this item?",
+                    "Yes",
+                    "No"
+                ){
+                    viewModel.deleteBookMarks(bookMark.bookmarkId)
+                }.show(childFragmentManager,null)
 
+            }else{
+                ConstraintUtils.movieDetails.nowShowingMovieID = bookMark.bookmarkId.toInt()
+                findNavController().navigate(R.id.detailsFragment)
             }
+        }
+
+        binding.bookmarksRV.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = bookMarkAdapter
+        }
+        bookMarkAdapter.notifyDataSetChanged()
+
+        viewModel.getBookMarkMovie().observe(viewLifecycleOwner){
+            bookMarkAdapter.submitList(it)
         }
 
         return binding.root
