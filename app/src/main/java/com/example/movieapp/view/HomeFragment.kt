@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.*
 import android.widget.AbsListView
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -19,12 +18,9 @@ import com.example.movieapp.adapter.NowShowingAdapter
 import com.example.movieapp.adapter.PopularMovieAdapter
 import com.example.movieapp.databinding.FragmentHomeBinding
 import com.example.movieapp.model.Genre
-import com.example.movieapp.model.NowShowingMovieModel
 import com.example.movieapp.model.PResult
 import com.example.movieapp.model.Result
-import com.example.movieapp.utils.ConstraintUtils
 import com.example.movieapp.viewmodel.NowShowingMovieViewModel
-
 
 
 class HomeFragment : Fragment() {
@@ -100,6 +96,8 @@ class HomeFragment : Fragment() {
 
                     }
                 }
+
+
             }else if(value==1){
                 Log.e("callback", "onCreateView: insert" )
                 findNavController().navigate(R.id.detailsFragment)
@@ -142,6 +140,7 @@ class HomeFragment : Fragment() {
                     nowShowingPage++
                     fatchData(nowShowingPage)
                     Toast.makeText(requireContext(), "End", Toast.LENGTH_SHORT).show()
+                    //something
 
                 }
 
@@ -154,6 +153,9 @@ class HomeFragment : Fragment() {
             adapter = popularMovieAdapter
         }
         /*popularMovieAdapter.notifyDataSetChanged()*/
+        binding.popularRV.viewTreeObserver.addOnGlobalLayoutListener {
+            Log.e("viewTreeObserver", "onCreateView: viewTreeObserver" )
+        }
 
         binding.popularRV.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -188,6 +190,9 @@ class HomeFragment : Fragment() {
             showingAdapter.notifyDataSetChanged()
         }
 
+
+
+
         viewModel.popularMovieResult.observe(viewLifecycleOwner){
 
             for(i in 0..it.results.size - 1){
@@ -195,6 +200,9 @@ class HomeFragment : Fragment() {
             }
             popularMovieAdapter.submitList(popularList)
             popularMovieAdapter.notifyDataSetChanged()
+
+
+
 
             mProgressDialog.dismiss()
 
